@@ -57,7 +57,8 @@ const Dashboard = () => {
     await set(ref(db, `/${auth.currentUser.uid}/${userid}`), {
       todo: todo,
       desc: desc,
-      userid: userid
+      userid: userid,
+      // completed: false
     })
 
     setTodo("");
@@ -80,7 +81,8 @@ const Dashboard = () => {
     await update(ref(db, `/${auth.currentUser.uid}/${tempUid}`), {
       todo: todo,
       desc: desc,
-      tempUid: tempUid
+      tempUid: tempUid,
+
     });
 
     setTodo("");
@@ -97,6 +99,7 @@ const Dashboard = () => {
     setTodos(todos.filter((todos)=>
       todos.todo.toLowerCase().includes(value.toLowerCase())  
     ))
+    setValue('')
   }
 
 
@@ -119,12 +122,14 @@ const Dashboard = () => {
             <input type="text" 
             placeholder='Title'
             required
+            pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,10}$"
             className='title'
             value={todo} onChange={(e) => setTodo(e.target.value)} 
             />
           <input type="text" 
           placeholder='Description'
           required
+          pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,10}$"
           className='desc' 
           value={desc} onChange={(e) => setDesc(e.target.value)} 
          />
@@ -139,8 +144,6 @@ const Dashboard = () => {
         )}
       </form>
       <div className='line'></div>
-    
-
       {/* right */}
      <div>
         <h1 className='todolist'>TODO LIST</h1>
@@ -157,7 +160,9 @@ const Dashboard = () => {
                        />
                     </td> 
                     <td>
-                      <button className='btn btn-white' type='submit'><i class="fa-solid fa-magnifying-glass"></i></button> 
+                      <button className='btn btn-white' type='submit'>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        </button> 
                     </td>   
                       
                  </tr>
@@ -169,18 +174,9 @@ const Dashboard = () => {
                   <div className='todo'>
                   <div className=''><h5 >{todos.todo}</h5></div>
                   </div>
-                  ))}
-                  
-          
-        </form>
-        
-
-       <select class="filter">
-        <option selected>Filter By</option>
-        <option value="1">Completed</option>
-        <option value="2">Favorite</option>
-        <option value="3">Deleted</option>
-      </select>
+                  ))}  
+          </form>
+     
         {
           todos.map((todo) => (
             <div className='todo'>
@@ -192,7 +188,9 @@ const Dashboard = () => {
               <button className='delete' onClick={() => handleDelete(todo.userid)}><i class="fa-solid fa-trash"></i></button>
               </div>
               <div class="input-group mb-3">
-              <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input"/>
+              <input class="form-check-input mt-0" 
+              type="checkbox" 
+              aria-label="Checkbox for following text input"/>
               </div>
             </div>
             
